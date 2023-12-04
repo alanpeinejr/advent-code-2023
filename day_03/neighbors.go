@@ -13,10 +13,8 @@ func main(){
 	//part 1
 	engine := parseInput(readInput())
 	fmt.Println(sum(neighbors(engine)))
-	fmt.Println(sum(gears(engine)))
-	//validGameIds := disqualify(Pull{12, 13, 14}, games)
-	//fmt.Println(sum(validGameIds))
 	//part 2
+	fmt.Println(sum(gears(engine)))
 
 }
 
