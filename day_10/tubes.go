@@ -8,26 +8,34 @@ import (
 
 func main(){
 	//part 1
-	start, length := mapPipe(parseLines(readInput()))
-	fmt.Println(start, length)
+	start, length, area := mapPipe(parseLines(readInput()))
+	fmt.Println(start, length, area)
 	fmt.Println(length/2)
 
 	//part 2
+	//Pick's
+	//AREA = Inner + Border/2 - 1
+	//Inner = Area + 1 - Border/2
+	fmt.Println(area - (length/2) + 1 )
 }
-
-func mapPipe(start Pipe, field [][]rune) (looped Pipe, len int){
+func mapPipe(start Pipe, field [][]rune) (looped Pipe, len int, area int){
 	len = 1//because we add the first connection manually
 	x, y := findFirstConnection(start, field)
+	//Shoelace Formula area
+	//A = ([x1 * y2 - y1 * x2] + [x2 * y3 - y2 * x3]...and so on) / 2
+	area =  start.X * y - start.Y * x
 	next := Pipe{x, y, field[y][x], &start, nil}
 	start.b = &next
 	for next.Symbol != 'S' {
-		next = nextPipe(next, field)
+		current := next
+		next = nextPipe(current, field)
 		len+=1
+		area += current.X * next.Y - current.Y * next.X
 	}
 	//overwrite end just to do a full loop
 	next.b = &start
 
-	return start, len
+	return start, len, area/2
 }
 
 func nextPipe(current Pipe, field [][]rune) Pipe {
