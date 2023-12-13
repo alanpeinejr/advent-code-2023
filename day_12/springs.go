@@ -72,15 +72,15 @@ func iterateSprings(springIndex int, lengthIndex int, springs string, lengths []
 	}
 
 	possibilities := 0
-	if springs[springIndex] != '#' {
-		possibilities += iterateSprings(springIndex + 1, lengthIndex, springs, lengths, cache)
-	}
-
+	//builds a potential spring and skips ahead.
 	if lengthIndex < len(lengths) {
-		//springLength matches, skip ahead
 		if springPotentialMatchesLength(springIndex, lengths[lengthIndex], springs){
 			possibilities += iterateSprings(springIndex + lengths[lengthIndex] + 1, lengthIndex + 1, springs, lengths, cache)
 		}
+	}
+	//gets the non skipped ahead variations
+	if springs[springIndex] != '#' {
+		possibilities += iterateSprings(springIndex + 1, lengthIndex, springs, lengths, cache)
 	}
 
 	cache[springIndex][lengthIndex] = possibilities
