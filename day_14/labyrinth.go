@@ -40,7 +40,7 @@ func uniqueScore(platform [][]rune) int {
 			case 'O':
 				//best idea of the day. I started with just trying the weights but they repeated out of cycle
 				//primes and non zero based to avoid noncycle duplicates
-				score += 7 * ((y +1)*17) * ((x+1)*23)
+				score +=  (y +1) * (x+1)
 			}
 		}
 	}
