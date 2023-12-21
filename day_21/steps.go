@@ -58,7 +58,7 @@ func part2(firsts map[Point]int) int{
 	fmt.Println(cycle, evenFull, evenPastHalf, oddFull, oddPastHalf)//evens fulls match 499/500 step counts i did above
 	totalFilled := (cycle * cycle * evenFull) + ((cycle + 1) * (cycle + 1) * oddFull)
 	cornersRemoved := (cycle + 1) * oddPastHalf
-	cornersAdded := (cycle-1) * (evenPastHalf )//i dont know why - 1, S maybe?, I was off by one cycle length and this is only place where that math could work out
+	cornersAdded := cycle * (evenPastHalf - 1)//i dont know why - 1, S maybe?, I was off by one cycle length and this is only place where that math could work out
 	return totalFilled - cornersRemoved + cornersAdded
 }
 
