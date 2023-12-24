@@ -37,6 +37,8 @@ func countIntersections2D(vectors []Vector, rangeLow, rangeHigh float64) int{
 
 //u := (as.y*bd.x + bd.y*bs.x - bs.y*bd.x - bd.y*as.x ) / (ad.x*bd.y - ad.y*bd.x) as,bs = points
 //p = as + ad * u
+//p = bs + bd * v
+
 //v := (as.x + ad.x * u - bs.x) / bd.x
 //https://stackoverflow.com/questions/2931573/determining-if-two-rays-intersect
 func intersects2D(a, b Vector) (bool, Point, float64, float64){
