@@ -10,20 +10,15 @@ import (
 func main(){
 	//part 1
 	//print(parseLines(readInput()))
-	//components := parseLines(readInput())
+	components := parseLines(readInput())
 	//print2(components)
-	print3(readInput())
+	//print3(readInput())
 	//orderedOccurances := freq(components)
 	//[dxtrrd jfzthz ppnxrn lfcnpm bxmxrn cfxvcb llzzck htfnpm jhvtfd hkjksp] 9861 8720 8517 8453 7953 8160 8095 7991 7751 7817
 	//fmt.Println(components["pzl"].without(components, []string{}))
 	//fmt.Println(components["pzl"].without(components, []string{"hfx", "jqt", "cmg"}))
 	//fmt.Println(components["pzl"].without(components, []string{"qnr", "xhk", "lhk"}))
 	//fmt.Println(components["jpt"].without(components, []string{}))
-	//dxt, jfz, ppn
-	//dxt, jfz, lfc
-	//dxt, jfz, bxm
-	//dxt, ppn, lfc
-	//dxt, ppn, bxm
 	//potentials := []string{"dxt", "rrd", "jfz", "ppn", "xrn", "lfc", "npm", "bxm", "cfx", "vcb", "thz", "htf", "jhv", "tfd", "hkj", "ksp"}
 	//potentials := orderedOccurances[:50]
 	//for i:= 0; i < len(potentials); i++{
@@ -38,8 +33,10 @@ func main(){
 	//		}
 	//	}
 	//}
+	fmt.Println(len(components))
+	fmt.Println(components["dhj"].without(components, []string{"xqh", "khn", "mqb"}))//how big dhj side is excluding its own
+	fmt.Println(components["dhj"].without(components, []string{"ssd", "nrs", "qlc"}))//how this side is exluding the other sides connectors
 
-	//fmt.Println(components["jpt"].without(components, []string{"xrn", "npm", "bxm"}))
 
 
 	fmt.Println()
