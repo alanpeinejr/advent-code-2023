@@ -1,3 +1,5 @@
+graph test {
+searchsize = 3
 zvk -- shb ;
 zvk -- cxf ;
 zvk -- qlp ;
@@ -5085,5 +5087,4 @@ pqr [label="pqr"] ;
 jxp [label="jxp"] ;
 kdt [label="kdt"] ;
 qfq [label="qfq"] ;
-
-
+}
