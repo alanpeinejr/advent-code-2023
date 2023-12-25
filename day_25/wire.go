@@ -10,14 +10,36 @@ import (
 func main(){
 	//part 1
 	//print(parseLines(readInput()))
-	components := parseLines(readInput())
-	print2(components)
-	//freq(components)
+	//components := parseLines(readInput())
+	//print2(components)
+	print3(readInput())
+	//orderedOccurances := freq(components)
+	//[dxtrrd jfzthz ppnxrn lfcnpm bxmxrn cfxvcb llzzck htfnpm jhvtfd hkjksp] 9861 8720 8517 8453 7953 8160 8095 7991 7751 7817
 	//fmt.Println(components["pzl"].without(components, []string{}))
 	//fmt.Println(components["pzl"].without(components, []string{"hfx", "jqt", "cmg"}))
 	//fmt.Println(components["pzl"].without(components, []string{"qnr", "xhk", "lhk"}))
 	//fmt.Println(components["jpt"].without(components, []string{}))
-	//fmt.Println(components["jpt"].without(components, []string{"rrd", "thz", "xrn"}))
+	//dxt, jfz, ppn
+	//dxt, jfz, lfc
+	//dxt, jfz, bxm
+	//dxt, ppn, lfc
+	//dxt, ppn, bxm
+	//potentials := []string{"dxt", "rrd", "jfz", "ppn", "xrn", "lfc", "npm", "bxm", "cfx", "vcb", "thz", "htf", "jhv", "tfd", "hkj", "ksp"}
+	//potentials := orderedOccurances[:50]
+	//for i:= 0; i < len(potentials); i++{
+	//	for j:= i + 1; j < len(potentials); j++ {
+	//		for k := j + 1; k < len(potentials); k++ {
+	//			length := components["jpt"].without(components, []string{potentials[i], potentials[j], potentials[k]})
+	//			if length < 1571 {
+	//				fmt.Printf("%s %s %s\n", potentials[i], potentials[j], potentials[k])
+	//			}
+	//			//fmt.Println(components["jpt"].without(components, []string{potentials[i], potentials[j], potentials[k]}))
+	//
+	//		}
+	//	}
+	//}
+
+	//fmt.Println(components["jpt"].without(components, []string{"xrn", "npm", "bxm"}))
 
 
 	fmt.Println()
@@ -48,6 +70,23 @@ func print2(components map[string]*Component) {
 
 	}
 }
+func print3(lines string) {
+	uniques := map[string]bool{}
+	for _, row := range strings.Split(lines, "\n") {
+		labelAndConnections := strings.Split(row, ": ")
+		label := labelAndConnections[0]
+		uniques[label] = true
+		connections := strings.Fields(labelAndConnections[1])
+		for _, conLabel := range connections {
+			uniques[conLabel] = true
+			fmt.Printf("%s -- %s ;\n", label, conLabel)
+
+		}
+	}
+	for key, _ := range  uniques {
+		fmt.Printf("%s [label=\"%s\"] ;\n", key, key)
+	}
+}
 
 func (this Component) without(components map[string]*Component, us []string) int {
 	queue := []string{this.label}
@@ -66,7 +105,7 @@ func (this Component) without(components map[string]*Component, us []string) int
 
 }
 
-func freq(components map[string]*Component)  {
+func freq(components map[string]*Component) []string  {
 	freq := map[string]int{}
 	for key, _ := range components {
 		queue := []string{key}
@@ -89,23 +128,25 @@ func freq(components map[string]*Component)  {
 			}
 		}
 	}
-	largest := []string{"vtrdjb", "vtrdjb", "vtrdjb"}
+	stringFreqs := []OrderableStringFreq{}
 	for key, value := range freq {
-		if value > freq[largest[0]]{
-			largest[2] = largest[1]
-			largest[1] = largest[0]
-			largest[0] = key
-		}else if value > freq[largest[1]] {
-			largest[2] = largest[1]
-			largest[1] = key
-		}else if value > freq[largest[2]]{
-			largest[2] = key
-		}
-		//fmt.Println(key, value)
+		stringFreqs  = append(stringFreqs, OrderableStringFreq{key, value})
 	}
-	fmt.Println(largest, freq[largest[0]], freq[largest[1]], freq[largest[2]])
+	slices.SortFunc(stringFreqs, compare)
 
-	//return len(visited)
+	splitFreqs := []string{}
+	for _, value := range stringFreqs {
+		a, b := value.label[:3], value.label[3:]
+		if !slices.Contains(splitFreqs, a) {
+			splitFreqs = append(splitFreqs, a)
+		}
+		if !slices.Contains(splitFreqs, b) {
+			splitFreqs = append(splitFreqs, b)
+		}
+	}
+
+	fmt.Println(splitFreqs[0])
+	return splitFreqs
 
 }
 
@@ -135,7 +176,15 @@ type (
 		seen int
 		connections []*Component
 	}
+	OrderableStringFreq struct {
+		label string
+		freq int
+	}
 )
+
+func compare(a, b OrderableStringFreq) int {
+	return b.freq - a.freq
+}
 
 
 func readInput() string {
