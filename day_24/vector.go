@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -15,26 +16,103 @@ func main(){
 
 
 	//part 2
-	fmt.Println()
+	x, y, z := theOdds(vectors)
+	fmt.Println(x + y + z)
 
 }
 
-func countIntersections2D(vectors []Vector, rangeLow, rangeHigh float64) int{
-	sum := 0
-	for i:= 0; i < len(vectors); i++ {
+func theOdds(vectors []Vector) (int, int, int){
+	xVs, yVs, zVs := potentialVelocities(vectors)
+	fmt.Println(zVs)
+	if len(xVs) == len(yVs) && len(yVs) == len(zVs) && len(zVs) == 1 {
+		rXv, rYv, rZv := float64(xVs[0]), float64(yVs[0]), float64(zVs[0])
+		a, b := vectors[0], vectors[1]
+		mA := (a.Yv - rYv) / (a.Xv - rXv)
+		mB := (b.Yv - rYv) / (b.Xv - rXv)
+		cA := a.Y - (mA * a.X)
+		cB := b.Y - (mB * b.X)
+		xPos := (cB - cA) / (mA - mB)
+		yPos := mA * xPos + cA
+		time := (xPos - a.X) / (a.Xv - rXv)
+		zPos := a.Z + (a.Zv - rZv) * time
+		return int(xPos), int(yPos), int(zPos)
+	}
+	fmt.Println("no possibles")
+	return -1, -1, -1
+}
+
+func potentialVelocities(vectors []Vector) ([]int, []int, []int){
+	x, y, z := []int{}, []int{}, []int{}
+	for i:= 0; i < len(vectors) - 1; i++ {
 		for j:= i + 1; j < len(vectors); j++ {
+			a, b := vectors[i], vectors[j]
+			if a.Xv == b.Xv {
+				maybe := matchingVelocity(int(b.X - a.X), int(a.Xv))
+				if len(maybe) == 0 {
+					x = maybe
+				}else {
+					x = intersect(x, maybe)
+					fmt.Println(x)
+				}
+			}
+			if a.Yv == b.Yv {
+				maybe := matchingVelocity(int(b.Y - a.Y), int(a.Yv))
+				if len(maybe) == 0 {
+					y = maybe
+				}else {
+					y = intersect(y, maybe)
+					fmt.Println(y)
+
+				}
+			}
+			if a.Zv == b.Zv {
+				maybe := matchingVelocity(int(b.Z - a.Z), int(a.Zv))
+				if len(maybe) == 0 {
+					z = maybe
+				}else {
+					z = intersect(z, maybe)
+					fmt.Println(z)
+
+				}
+			}
+		}
+	}
+	return x, y, z
+}
+
+func matchingVelocity(dV, pV int) []int {
+	match := make([]int, 0)
+	for v:= -1000; v < 1000; v++ {
+		if v != pV && dV % (v - pV) == 0 {
+			match = append(match, v)
+		}
+	}
+	return match
+}
+
+func intersect(a, b []int) []int {
+	intersections := make([]int, 0)
+	for _, value := range a {
+		if slices.Contains(b, value){
+			intersections = append(intersections, value)
+		}
+	}
+	return intersections
+}
+func countIntersections2D(vectors []Vector, rangeLow, rangeHigh float64) int {
+	sum := 0
+	for i := 0; i < len(vectors); i++ {
+		for j := i + 1; j < len(vectors); j++ {
 			intersects, at, iTime, jTime := intersects2D(vectors[i], vectors[j])
-			if intersects  && iTime > 0 && jTime > 0 {
-				if at.X <= rangeHigh && at.X >= rangeLow  && at.Y <= rangeHigh && at.Y >= rangeLow {
-					sum+=1
+			if intersects && iTime > 0 && jTime > 0 {
+				if at.X <= rangeHigh && at.X >= rangeLow && at.Y <= rangeHigh && at.Y >= rangeLow {
+					sum += 1
 				}
 			}
 		}
 	}
 	return sum
 }
-
-
 //u := (as.y*bd.x + bd.y*bs.x - bs.y*bd.x - bd.y*as.x ) / (ad.x*bd.y - ad.y*bd.x) as,bs = points
 //p = as + ad * u
 //p = bs + bd * v
